@@ -40,8 +40,8 @@ export const useUserData = () => {
   const [stats, setStats] = useState<UserStats>({
     totalRoadmaps: 0,
     completedSteps: 0,
-    currentStreak: 7, // This would come from tracking user activity
-    averageScore: 85, // This would come from quiz results
+    currentStreak: 7, 
+    averageScore: 85, 
   });
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +59,7 @@ export const useUserData = () => {
     try {
       setLoading(true);
 
-      // Fetch user profile
+    
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -72,7 +72,7 @@ export const useUserData = () => {
         setProfile(profileData);
       }
 
-      // Fetch user roadmaps
+      
       const { data: roadmapsData, error: roadmapsError } = await supabase
         .from('user_roadmaps')
         .select('*')
@@ -84,7 +84,7 @@ export const useUserData = () => {
       } else if (roadmapsData) {
         setRoadmaps(roadmapsData);
         
-        // Calculate stats from roadmaps
+        
         const totalSteps = roadmapsData.reduce((sum, roadmap) => sum + roadmap.completed_steps, 0);
         setStats(prev => ({
           ...prev,
@@ -121,7 +121,7 @@ export const useUserData = () => {
         throw error;
       }
 
-      // Refresh roadmaps
+      
       await fetchUserData();
       return data;
     } catch (error) {
@@ -149,7 +149,7 @@ export const useUserData = () => {
         throw error;
       }
 
-      // Refresh roadmaps
+      
       await fetchUserData();
     } catch (error) {
       console.error('Error updating roadmap progress:', error);

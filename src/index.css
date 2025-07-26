@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LEARNMATE Design System - Electric Blue + Glassmorphism */
+
 
 @layer base {
   :root {
-    /* LEARNMATE Color Palette */
+    
     --background: 222 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -16,7 +16,7 @@
     --popover: 222 84% 6%;
     --popover-foreground: 210 40% 98%;
 
-    /* Electric Blue Primary */
+    
     --primary: 229 91% 48%;
     --primary-foreground: 210 40% 98%;
     --primary-glow: 229 91% 65%;
@@ -39,7 +39,7 @@
 
     --radius: 1rem;
     
-    /* Custom LEARNMATE Variables */
+   
     --electric-blue: 229 91% 48%;
     --electric-blue-light: 229 91% 65%;
     --electric-blue-dark: 229 91% 35%;
@@ -115,7 +115,7 @@
 }
 
 @layer components {
-  /* Glassmorphism Components */
+  
   .glass-card {
     @apply backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)];
   }

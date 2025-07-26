@@ -139,13 +139,13 @@ const ChatPage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div
-                        className={`max-w-[70%] p-3 rounded-2xl ${
+                        className={`max-w-[70%] p-3 rounded-2xl  overflow-hidden ${
                           message.isUser
                             ? "bg-primary text-primary-foreground ml-auto"
                             : "glass-card"
                         }`}
                       >
-                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <p className="text-sm leading-relaxed break-words whitespace-pre-wrap">{message.content}</p>
                         <span className="text-xs opacity-70 mt-2 block">
                           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
@@ -210,7 +210,7 @@ const ChatPage = () => {
                         key={index}
                         variant="outline"
                         size="sm"
-                        className="w-full text-left h-auto p-3 glass-card-hover justify-start text-xs"
+                        className="w-full text-left h-auto p-3 glass-card-hover justify-start text-xs break-words whitespace-pre-wrap"
                         onClick={() => setNewMessage(question)}
                       >
                         {question}

@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Directly using API key - in production, this would come from environment variables
+
 const API_KEY = 'AIzaSyCmgxN5d_fag99WCVBduMrBSFiXgJPPaFg';
 
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -67,7 +67,7 @@ export async function generateRoadmap(goal: string): Promise<RoadmapStep[]> {
     const response = await result.response;
     const text = response.text();
     
-    // Parse JSON response
+    
     const jsonMatch = text.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);

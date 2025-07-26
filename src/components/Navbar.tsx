@@ -12,7 +12,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-white/10">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          
           <Link to="/" className="flex items-center space-x-2 group">
             <div className="p-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow electric-glow">
               <Brain className="h-6 w-6 text-white" />
@@ -20,7 +20,7 @@ const Navbar = () => {
             <span className="text-xl font-bold gradient-text">LEARNMATE</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/dashboard" className="text-foreground hover:text-primary transition-colors">
               Dashboard
@@ -33,7 +33,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Auth Buttons */}
+          
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
@@ -57,7 +57,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          
           <Button
             variant="ghost"
             size="sm"
@@ -68,7 +68,7 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* Mobile Menu */}
+        
         {isMenuOpen && (
           <div className="md:hidden mt-4 glass-card p-4 rounded-xl">
             <div className="flex flex-col space-y-4">
