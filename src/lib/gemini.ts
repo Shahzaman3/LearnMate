@@ -1,9 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-
-const API_KEY = 'AIzaSyCmgxN5d_fag99WCVBduMrBSFiXgJPPaFg';
-
-const genAI = new GoogleGenerativeAI(API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export interface RoadmapStep {
   id: string;
