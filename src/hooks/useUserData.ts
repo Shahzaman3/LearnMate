@@ -40,7 +40,7 @@ export const useUserData = () => {
   const [stats, setStats] = useState<UserStats>({
     totalRoadmaps: 0,
     completedSteps: 0,
-    currentStreak: 7, 
+    currentStreak: 1, 
     averageScore: 85, 
   });
   const [loading, setLoading] = useState(true);
