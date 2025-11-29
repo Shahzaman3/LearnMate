@@ -72,13 +72,13 @@ const SignupPage = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -111,17 +111,18 @@ const SignupPage = () => {
           navigate('/auth/login');
         }
       }
-    } catch (error: any) {
+    } catch (error) {
       let errorMessage = "An error occurred during signup";
-      
-      if (error.message.includes("User already registered")) {
+      const err = error as Error;
+
+      if (err.message.includes("User already registered")) {
         errorMessage = "An account with this email already exists";
-      } else if (error.message.includes("Password")) {
+      } else if (err.message.includes("Password")) {
         errorMessage = "Password does not meet requirements";
-      } else if (error.message.includes("Email")) {
+      } else if (err.message.includes("Email")) {
         errorMessage = "Please enter a valid email address";
       } else {
-        errorMessage = error.message;
+        errorMessage = err.message;
       }
 
       toast({
@@ -164,7 +165,7 @@ const SignupPage = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input
@@ -194,7 +195,7 @@ const SignupPage = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password *</Label>
                 <div className="relative">
@@ -257,9 +258,9 @@ const SignupPage = () => {
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={loading}
               >
                 {loading ? (
@@ -276,8 +277,8 @@ const SignupPage = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
-                <Link 
-                  to="/auth/login" 
+                <Link
+                  to="/auth/login"
                   className="text-primary hover:underline font-medium"
                 >
                   Sign in

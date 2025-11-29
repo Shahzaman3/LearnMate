@@ -16,7 +16,7 @@ const ForgotPasswordPage = () => {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       toast({
         title: "Error",
@@ -37,7 +37,7 @@ const ForgotPasswordPage = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
@@ -52,10 +52,10 @@ const ForgotPasswordPage = () => {
         title: "Email sent",
         description: "Check your email for password reset instructions",
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: error.message || "An error occurred while sending reset email",
+        description: (error as Error).message || "An error occurred while sending reset email",
         variant: "destructive",
       });
     } finally {
@@ -80,7 +80,7 @@ const ForgotPasswordPage = () => {
               <p className="text-sm text-muted-foreground">
                 Click the link in the email to reset your password. If you don't see it, check your spam folder.
               </p>
-              
+
               <div className="space-y-2">
                 <Button
                   variant="outline"
@@ -89,7 +89,7 @@ const ForgotPasswordPage = () => {
                 >
                   Send another email
                 </Button>
-                
+
                 <Link to="/auth/login">
                   <Button variant="ghost" className="w-full">
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -134,9 +134,9 @@ const ForgotPasswordPage = () => {
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={loading}
               >
                 {loading ? (
@@ -151,8 +151,8 @@ const ForgotPasswordPage = () => {
             </form>
 
             <div className="mt-6 text-center">
-              <Link 
-                to="/auth/login" 
+              <Link
+                to="/auth/login"
                 className="text-sm text-muted-foreground hover:text-primary flex items-center justify-center"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />

@@ -16,7 +16,7 @@ export interface UserRoadmap {
   user_id: string;
   title: string;
   goal: string;
-  roadmap_data: any;
+  roadmap_data: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   progress: number;
   total_steps: number;
   completed_steps: number;
@@ -99,7 +99,7 @@ export const useUserData = () => {
     }
   };
 
-  const saveRoadmap = async (title: string, goal: string, roadmapData: any, difficulty: string) => {
+  const saveRoadmap = async (title: string, goal: string, roadmapData: any, difficulty: string) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!user) return null;
 
     try {

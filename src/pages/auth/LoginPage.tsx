@@ -27,7 +27,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast({
         title: "Error",
@@ -38,7 +38,7 @@ const LoginPage = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -56,10 +56,10 @@ const LoginPage = () => {
         });
         navigate('/dashboard');
       }
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Login Failed",
-        description: error.message || "An error occurred during login",
+        description: (error as Error).message || "An error occurred during login",
         variant: "destructive",
       });
     } finally {
@@ -96,7 +96,7 @@ const LoginPage = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
@@ -128,17 +128,17 @@ const LoginPage = () => {
               </div>
 
               <div className="flex items-center justify-between">
-                <Link 
-                  to="/auth/forgot-password" 
+                <Link
+                  to="/auth/forgot-password"
                   className="text-sm text-primary hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={loading}
               >
                 {loading ? (
@@ -155,8 +155,8 @@ const LoginPage = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{' '}
-                <Link 
-                  to="/auth/signup" 
+                <Link
+                  to="/auth/signup"
                   className="text-primary hover:underline font-medium"
                 >
                   Sign up
