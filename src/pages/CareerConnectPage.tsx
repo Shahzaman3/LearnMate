@@ -1,58 +1,63 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ExternalLink, TrendingUp, DollarSign, MapPin, Users } from "lucide-react";
+import { ArrowLeft, ExternalLink, TrendingUp, DollarSign, MapPin, Users, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import { generateCareerPaths } from "@/lib/gemini";
+import { useToast } from "@/hooks/use-toast";
 
-interface CareerPath {
+// Interface locally adapted or valid if relying on generic handling
+interface CareerPathDisplay {
   id: string;
   title: string;
   description: string;
   averageSalary: string;
   growthRate: string;
-  demandLevel: "High" | "Medium" | "Low";
+  demandLevel: string;
   requiredSkills: string[];
   relatedRoles: string[];
   topLocations: string[];
 }
 
 const CareerConnectPage = () => {
-  const careerPaths: CareerPath[] = [
-    {
-      id: "1",
-      title: "Frontend React Developer",
-      description: "Build engaging user interfaces and web applications using React, JavaScript, and modern frontend technologies.",
-      averageSalary: "$75,000 - $120,000",
-      growthRate: "13%",
-      demandLevel: "High",
-      requiredSkills: ["React", "JavaScript", "HTML/CSS", "TypeScript", "Git", "API Integration"],
-      relatedRoles: ["Full Stack Developer", "UI/UX Engineer", "Frontend Lead"],
-      topLocations: ["San Francisco", "New York", "Seattle", "Austin", "Remote"]
-    },
-    {
-      id: "2", 
-      title: "Full Stack JavaScript Developer",
-      description: "Work on both frontend and backend systems using JavaScript technologies like Node.js, React, and databases.",
-      averageSalary: "$85,000 - $140,000",
-      growthRate: "15%",
-      demandLevel: "High",
-      requiredSkills: ["React", "Node.js", "JavaScript", "Databases", "APIs", "DevOps"],
-      relatedRoles: ["Software Engineer", "Tech Lead", "Solution Architect"],
-      topLocations: ["San Francisco", "New York", "London", "Berlin", "Remote"]
-    },
-    {
-      id: "3",
-      title: "React Native Mobile Developer", 
-      description: "Create cross-platform mobile applications using React Native for iOS and Android platforms.",
-      averageSalary: "$80,000 - $130,000",
-      growthRate: "18%",
-      demandLevel: "High",
-      requiredSkills: ["React Native", "React", "JavaScript", "Mobile UI", "App Store Deployment"],
-      relatedRoles: ["Mobile App Developer", "Cross-platform Developer", "Mobile Lead"],
-      topLocations: ["San Francisco", "Los Angeles", "New York", "Toronto", "Remote"]
-    }
-  ];
+  const [careerPaths, setCareerPaths] = useState<CareerPathDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        // Hardcoded goal for now, ideally comes from user context
+        const paths = await generateCareerPaths("React Developer");
+        // Enrich data with missing UI fields for demo purposes or handle missing fields gracefully
+        const enrichedPaths: CareerPathDisplay[] = paths.map((path, index) => ({
+          id: index.toString(),
+          title: path.title,
+          description: path.description,
+          averageSalary: path.averageSalary,
+          growthRate: "High", // Placeholder
+          demandLevel: path.demandLevel,
+          requiredSkills: path.requiredSkills,
+          relatedRoles: path.relatedRoles,
+          topLocations: ["Remote", "Tech Hubs"], // Placeholder
+        }));
+        setCareerPaths(enrichedPaths);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load career paths. Please check your API key.",
+          variant: "destructive",
+        });
+        // Fallback to empty or previous dummy data could be considered here
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCareers();
+  }, [toast]);
 
   const getDemandColor = (level: string) => {
     switch (level) {
@@ -63,10 +68,18 @@ const CareerConnectPage = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 pt-24 pb-12">
         <Link to="/dashboard" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-6">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -119,7 +132,7 @@ const CareerConnectPage = () => {
         {/* Career Paths */}
         <div className="space-y-6">
           <h2 className="text-2xl font-semibold mb-6">Career Paths for React Developers</h2>
-          
+
           {careerPaths.map((career) => (
             <Card key={career.id} className="glass-card-hover">
               <CardHeader>
@@ -143,7 +156,7 @@ const CareerConnectPage = () => {
                     </div>
                     <div className="text-lg font-semibold">{career.averageSalary}</div>
                   </div>
-                  
+
                   <div className="glass-card p-4 rounded-lg">
                     <div className="flex items-center space-x-2 mb-2">
                       <TrendingUp className="h-4 w-4 text-blue-400" />

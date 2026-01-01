@@ -6,6 +6,8 @@ import { ArrowLeft, Send, Brain, User, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import { chatWithAssistant } from "@/lib/gemini";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
@@ -26,6 +28,7 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,34 +52,29 @@ const ChatPage = () => {
     setNewMessage("");
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await chatWithAssistant(newMessage);
+
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: generateAIResponse(newMessage),
+        content: response,
         isUser: false,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to get AI response. Please check your API key.",
+        variant: "destructive",
+      });
+      console.error(error);
+    } finally {
       setIsLoading(false);
-    }, 1500);
-  };
-
-  const generateAIResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase();
-    
-    if (input.includes("react") && input.includes("hook")) {
-      return "React hooks are functions that let you use state and other React features in functional components. The most common ones are useState for managing state, useEffect for side effects, and useContext for consuming context. Would you like me to explain any specific hook in detail?";
-    } else if (input.includes("career") || input.includes("job")) {
-      return "For a React developer career, focus on building a strong portfolio with diverse projects. Key skills include React fundamentals, state management (Redux/Context), testing, and understanding of modern JavaScript. The job market for React developers is very strong with many remote opportunities. Would you like specific advice on portfolio projects?";
-    } else if (input.includes("learn") || input.includes("study")) {
-      return "The best approach to learning React is hands-on practice. Start with the official React documentation, build small projects, then gradually tackle more complex applications. I recommend building a todo app, weather app, and e-commerce site to cover different concepts. What specific topic would you like to focus on?";
-    } else if (input.includes("project") || input.includes("portfolio")) {
-      return "Great portfolio projects for React developers include: 1) A personal portfolio website, 2) A task management app with CRUD operations, 3) A weather app using APIs, 4) An e-commerce site with cart functionality, 5) A social media dashboard. Each should demonstrate different React concepts. Which type of project interests you most?";
-    } else {
-      return "That's a great question! Based on your React learning journey, I'd recommend focusing on practical application of concepts. Practice building components, managing state, and working with APIs. Remember, consistent daily practice is key to mastering React development. Is there a specific React concept you're struggling with?";
     }
   };
+
+  // Removed generateAIResponse as it is no longer used
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -87,7 +85,7 @@ const ChatPage = () => {
 
   const suggestedQuestions = [
     "How do React hooks work?",
-    "What projects should I build for my portfolio?", 
+    "What projects should I build for my portfolio?",
     "How do I prepare for React developer interviews?",
     "What's the difference between useState and useReducer?"
   ];
@@ -95,7 +93,7 @@ const ChatPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-4xl mx-auto">
           <Link to="/dashboard" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-6">
@@ -129,9 +127,8 @@ const ChatPage = () => {
                   {messages.map((message) => (
                     <div
                       key={message.id}
-                      className={`flex items-start space-x-3 ${
-                        message.isUser ? "flex-row-reverse space-x-reverse" : ""
-                      }`}
+                      className={`flex items-start space-x-3 ${message.isUser ? "flex-row-reverse space-x-reverse" : ""
+                        }`}
                     >
                       <Avatar className="w-8 h-8">
                         <AvatarFallback className={message.isUser ? "bg-primary" : "bg-gradient-to-r from-primary to-primary-glow"}>
@@ -139,11 +136,10 @@ const ChatPage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div
-                        className={`max-w-[70%] p-3 rounded-2xl  overflow-hidden ${
-                          message.isUser
-                            ? "bg-primary text-primary-foreground ml-auto"
-                            : "glass-card"
-                        }`}
+                        className={`max-w-[70%] p-3 rounded-2xl  overflow-hidden ${message.isUser
+                          ? "bg-primary text-primary-foreground ml-auto"
+                          : "glass-card"
+                          }`}
                       >
                         <p className="text-sm leading-relaxed break-words whitespace-pre-wrap">{message.content}</p>
                         <span className="text-xs opacity-70 mt-2 block">
@@ -152,7 +148,7 @@ const ChatPage = () => {
                       </div>
                     </div>
                   ))}
-                  
+
                   {isLoading && (
                     <div className="flex items-start space-x-3">
                       <Avatar className="w-8 h-8">
